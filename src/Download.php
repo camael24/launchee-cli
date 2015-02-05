@@ -12,8 +12,7 @@ class Download
         $url_info = pathinfo($url);
 
         if (!file_exists($destination.'/'.$url_info['basename'])) {
-            
-        	$file = new \Camael24\Cli\Downloader($url);
+            $file = new \Camael24\Cli\Downloader($url);
 
             $bar = new \Camael24\Cli\Progressbar($file, ['width' => 25]);
 
