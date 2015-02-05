@@ -1,0 +1,32 @@
+{
+	"vendor" : "Hoa",
+	"name"   : "XulApp",
+	"config" : {
+		"method" : "copy"
+	},
+	"http" : {
+
+		"nginx" : {
+			"version"      : "1.4",
+			"conf"         : "nginx-conf",
+			"site-enabled" : "nginx-site-enabled"
+		},
+		"php" : {
+			"ip"      : "127.0.0.1",
+			"port"    : "80",
+			"ext"     :  ["intl", "apc"]
+		},
+		"apache": {}
+	},
+	"db" : {
+		"mysql" : {
+			".." : ".."
+		}
+
+	},
+	"xulrunner" : {
+		"version" : "25.*",
+		"url" : "http://127.0.0.1:80",
+		"base" : "Main.xul"
+	}
+}
