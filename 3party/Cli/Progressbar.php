@@ -4,25 +4,34 @@ namespace Camael24\Cli;
 class Progressbar
 {
     private $_stream  = null;
+    private $_info    = array();
+    private $_label   = '';
     private $_options = [
-        'bracket_'     => '[',
-        '_bracket'     => ']',
-        'fill'         => '=',
-        'cursor'       => '>',
-        'cursor_color' => 'fg(yellow) bg(black)',
-        'fill_color'   => 'fg(white) bg(blacl)',
-        'width'        => 4,
-        'span'         => 5,
+        'bracket_'      => '[',
+        '_bracket'      => ']',
+        'fill'          => '=',
+        'fill_finished' => '-',
+        'cursor'        => '>',
+        'cursor_color'  => 'fg(yellow) bg(black)',
+        'fill_color'    => 'fg(white) bg(blacl)',
+        'width'         => 4,
+        'span'          => 5,
     ];
 
-    public function __construct($stream, $options = array())
+    public function __construct($options = array())
     {
-        $this->_stream = $stream;
-        $this->_name   = 'php5.6.0';
-
         $this->setOptions($options);
     }
 
+    public function setStream($stream)
+    {
+        $this->_stream = $stream;
+    }
+
+    public function setLabel($label)
+    {
+        $this->_name   = $label;
+    }
     public function setOptions($options = [])
     {
         $this->_options = array_merge($this->_options, $options);
@@ -42,26 +51,20 @@ class Progressbar
         return;
     }
 
-    protected function _line($percent, $start_p, $end_p, $start_l)
+    public function seek($percent)
     {
         $current = round(($percent * $this->getOption('width')) / 100);
-        $current = $start_p + $current;
+        $current = $this->_info['progress']['start'] + $current;
 
-        if ($current > $end_p) {
-            $current = $end_p;
-        }
-
-        $current = $current - 1;
-
-        if ($current < $start_p) {
-            $current = $start_p;
+        if ($current > $this->_info['progress']['end']) {
+            $current = $this->_info['progress']['end'];
         }
 
         \Hoa\Console\Cursor::moveTo($current);
 
-        echo $this->getOption('fill').$this->getOption('cursor');
+        echo $this->getOption('cursor');
 
-        \Hoa\Console\Cursor::moveTo($start_l);
+        \Hoa\Console\Cursor::moveTo($this->_info['label']['start']);
 
         if ($percent < 10) {
             echo '0';
@@ -73,44 +76,33 @@ class Progressbar
         echo $percent;
     }
 
-    public function run()
+    public function start()
     {
-        $this->_stream->on('progress', function (Hoa\Core\Event\Bucket $bucket) {
-
-            echo 'Helo';
-
-    return;
-});
-
-        $this->_stream->saveAs('/tmp/foo.zip');
-
-        return;
-        // <filename> [====>====] 52%
-       $information = 'php5.6.0.tar.bz2';
-        $span        = $this->getOption('span');
-        $baseline    = str_repeat(' ', $span);
-        $baseline   .= $this->_name.' ';
-        $baseline   .= $this->getOption('bracket_');
-        $start_p     = strlen($baseline) +1;
-        $baseline   .= str_repeat($this->getOption('fill'), $this->getOption('width'));
-        $end_p       = strlen($baseline);
-        $baseline   .= $this->getOption('_bracket').'   ';
-        $start_l     = strlen($baseline)+1;
-        $baseline   .= '100';
-        $end_l       = strlen($baseline);
-        $baseline   .= ' %';
-        $that        = $this;
+        $span                             = $this->getOption('span');
+        $baseline                         = str_repeat(' ', $span);
+        $baseline                        .= $this->_name.' ';
+        $baseline                        .= $this->getOption('bracket_');
+        $this->_info['progress']['start'] = strlen($baseline) +1;
+        $baseline                        .= str_repeat($this->getOption('fill'), $this->getOption('width'));
+        $this->_info['progress']['end']   = strlen($baseline);
+        $baseline                        .= $this->getOption('_bracket').'   ';
+        $this->_info['label']['start']    = strlen($baseline)+1;
+        $baseline                        .= '100';
+        $this->_info['label']['end']      = strlen($baseline);
+        $baseline                        .= ' %';
 
         echo $baseline;
 
         \Hoa\Console\Cursor::save();
+    }
 
-        for ($i = 0; $i <= 100; $i++) {
-            $this->_line($i, $start_p, $end_p, $start_l);
-        }
+    public function end()
+    {
+
+        \Hoa\Console\Cursor::moveTo($this->_info['progress']['start']);
+        echo str_repeat($this->getOption('fill_finished'), $this->getOption('width'));
 
         \Hoa\Console\Cursor::restore();
-
         echo "\n";
     }
 }
