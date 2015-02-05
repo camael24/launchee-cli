@@ -29,9 +29,6 @@ class Downloader extends \Hoa\File\Read
             $this->_progress->start();
         }
 
-        for($i = 0; $i <= 100; $i++)
-            $this->_progress->seek($i);
-
         $dest->writeAll($this->readAll());
 
         if ($this->_progress !== null) {
