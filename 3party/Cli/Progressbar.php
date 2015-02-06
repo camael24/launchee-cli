@@ -5,6 +5,7 @@ class Progressbar
 {
     private $_stream  = null;
     private $_info    = array();
+    private $_isAnimable = true;
     private $_label   = '';
     private $_options = [
         'bracket_'      => '[',
@@ -21,6 +22,9 @@ class Progressbar
     public function __construct($options = array())
     {
         $this->setOptions($options);
+
+        if(OS_WIN === true)
+            $this->_isAnimable = false;
     }
 
     public function setStream($stream)
@@ -53,6 +57,60 @@ class Progressbar
 
     public function seek($percent)
     {
+        if($this->_isAnimable === true)
+            $this->_animated($percent);
+        else
+            $this->_static($percent);
+
+        usleep(5000);
+    }
+
+
+    protected function goToBeginLine() {
+        echo "\x0D";
+    }
+
+    protected function finish() {
+        
+    }
+
+    protected function _static($percent) {
+        
+        $this->goToBeginLine();
+        $p = '';
+        if ($percent < 10) {
+            $p .= '0';
+        }
+        if ($percent < 100) {
+            $p .= '0';
+        }
+
+        $current     = round(($percent * $this->getOption('width')) / 100);
+        $rest        = $this->getOption('width') - $current - 1;
+        $p          .= $percent;
+        $span        = $this->getOption('span');
+        $baseline    = str_repeat(' ', $span);
+        $baseline   .= $this->_name.' ';
+        $baseline   .= $this->getOption('bracket_');
+
+        if($current > 1)
+            $current = $current -1;
+
+        $baseline   .= str_repeat($this->getOption('fill'), $current);
+        $baseline   .= '>';
+        
+        if($rest > 0)
+            $baseline   .= str_repeat($this->getOption('fill'), $rest);
+
+        $baseline   .= $this->getOption('_bracket').'   ';
+        $baseline   .= $p;
+        $baseline   .= ' %';
+
+        echo $baseline;
+
+    }
+
+    protected function _animated($percent) {
         $current = round(($percent * $this->getOption('width')) / 100);
         $current = $this->_info['progress']['start'] + $current;
 
@@ -93,16 +151,23 @@ class Progressbar
 
         echo $baseline;
 
-        \Hoa\Console\Cursor::save();
+        if($this->_isAnimable === true)
+            \Hoa\Console\Cursor::save();
     }
 
     public function end()
     {
 
-        \Hoa\Console\Cursor::moveTo($this->_info['progress']['start']);
-        echo str_repeat($this->getOption('fill_finished'), $this->getOption('width'));
+        if($this->_isAnimable === true)
+        {
+            \Hoa\Console\Cursor::moveTo($this->_info['progress']['start']);
+            echo str_repeat($this->getOption('fill_finished'), $this->getOption('width'));
 
-        \Hoa\Console\Cursor::restore();
+            \Hoa\Console\Cursor::restore();
+        }
+        else {
+            $this->finish();
+        }
         echo "\n";
     }
 }

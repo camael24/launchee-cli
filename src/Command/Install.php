@@ -29,14 +29,21 @@ use Hoa\Core\Exception\Exception;
                 }
             }
 
-            define('INSTALL_DIR', '/tmp/');
+            define('INSTALL_DIR', ROOT_DIR . 'tmp' . DIRECTORY_SEPARATOR);
 
             $fichier = null;
             $this->parser->listInputs($fichier);
 
             if ($fichier === null) {
                 $fichier = '/home/camael/dev/project/launchee/launchee.json';
+                if(!file_exists($fichier))
+                {
+                    $fichier = 'C:\\www\\launchee-cli\\launchee.json';
+                }
+                
             }
+
+
 
             $options = new \Launchee\Options(new \Hoa\File\Read($fichier));
 

@@ -3,7 +3,7 @@ namespace Launchee;
 
 class Download
 {
-    private $_useCache = true;
+    private $_useCache = false;
 
     public function useCache($bool)
     {
@@ -15,6 +15,7 @@ class Download
         if (!is_dir($destination)) {
             mkdir($destination);
         }
+
 
         $url_info = pathinfo($url);
         $progress = new \Camael24\Cli\Progressbar(['span' => 15]);

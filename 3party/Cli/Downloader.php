@@ -23,13 +23,16 @@ class Downloader extends \Hoa\File\Read
 
     public function saveAs($destination)
     {
-        $dest = new \Hoa\File\Write($destination);
+        //$dest = new \Hoa\File\Write($destination);
 
         if ($this->_progress !== null) {
             $this->_progress->start();
         }
 
-        $dest->writeAll($this->readAll());
+        for($i = 0; $i <= 100; $i++)
+            $this->_progress->seek($i);
+
+        //$dest->writeAll($this->readAll());
 
         if ($this->_progress !== null) {
             $this->_progress->end();

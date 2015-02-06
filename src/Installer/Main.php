@@ -11,6 +11,6 @@ class Main extends Generic
         // new \Launchee\File('Application.ini', 'application.tpl.php', ['vendor' => $vendor, 'name' => $name]);
 
         $item = new \Launchee\Download();
-        $item->get('https://github.com/twbs/bootstrap/releases/download/v3.3.2/bootstrap-3.3.2-dist.zip', INSTALL_DIR.'vendor-src');
+        $item->get('http://ark.im/', INSTALL_DIR.'vendor-src');
     }
 }

@@ -4,9 +4,16 @@ namespace Launchee;
 $path =  __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
     require $path;
 
+    if (defined('ROOT_DIR') === false) {
+        define('ROOT_DIR', realpath(__DIR__.DIRECTORY_SEPARATOR.'..').DIRECTORY_SEPARATOR);
+    }
+
+
     if (defined('TPL_DIR') === false) {
         define('TPL_DIR', realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'tpl').DIRECTORY_SEPARATOR);
     }
+
+    unset($_SERVER['TERM']);
 
     /**
      * Here we go…
