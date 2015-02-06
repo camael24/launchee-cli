@@ -40,7 +40,7 @@ class Download
 
 
             $url_info = pathinfo($url);
-            $progress = new \Camael24\Cli\Progressbar();
+            $progress = new \Camael24\Cli\Helper\Progressbar();
 
             if (file_exists($destination.'/'.$url_info['basename']) === false or $this->_useCache === false) {
                 if (file_exists($destination.'/'.$url_info['basename']) === true) {

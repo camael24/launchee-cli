@@ -4,7 +4,7 @@ namespace Camael24\Cli;
 class Downloader extends \Hoa\File\Read
 {
     private $_progress = null;
-    public function watchProgress($progress)
+    public function watchProgress(Helper\IProgressbar $progress)
     {
         $this->_progress = $progress;
         $this->_on->attach('progress',  function (Hoa\Core\Event\Bucket $bucket) use ($progress) {
@@ -35,7 +35,7 @@ class Downloader extends \Hoa\File\Read
         //$dest->writeAll($this->readAll());
 
         if ($this->_progress !== null) {
-            $this->_progress->end();
+            $this->_progress->stop();
         }
     }
 }
