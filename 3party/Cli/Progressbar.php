@@ -15,7 +15,7 @@ class Progressbar
         'cursor'        => '>',
         'cursor_color'  => 'fg(yellow) bg(black)',
         'fill_color'    => 'fg(white) bg(blacl)',
-        'width'         => 4,
+        'width'         => 10,
         'span'          => 5,
     ];
 
@@ -61,17 +61,24 @@ class Progressbar
             $this->_animated($percent);
         else
             $this->_static($percent);
-
-        usleep(5000);
     }
-
 
     protected function goToBeginLine() {
         echo "\x0D";
     }
 
     protected function finish() {
+        $this->goToBeginLine();
         
+        $span        = $this->getOption('span');
+        $baseline    = str_repeat(' ', $span);
+        $baseline   .= $this->_name.' ';
+        $baseline   .= $this->getOption('bracket_');
+        $baseline   .= str_repeat($this->getOption('fill_finished'), $this->getOption('width'));
+        $baseline   .= $this->getOption('_bracket').'   ';
+        $baseline   .= '100 %';
+
+        echo $baseline;
     }
 
     protected function _static($percent) {
@@ -92,10 +99,6 @@ class Progressbar
         $baseline    = str_repeat(' ', $span);
         $baseline   .= $this->_name.' ';
         $baseline   .= $this->getOption('bracket_');
-
-        if($current > 1)
-            $current = $current -1;
-
         $baseline   .= str_repeat($this->getOption('fill'), $current);
         $baseline   .= '>';
         
@@ -104,7 +107,6 @@ class Progressbar
 
         $baseline   .= $this->getOption('_bracket').'   ';
         $baseline   .= $p;
-        $baseline   .= ' %';
 
         echo $baseline;
 

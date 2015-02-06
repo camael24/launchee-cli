@@ -12,5 +12,7 @@ class Main extends Generic
 
         $item = new \Launchee\Download();
         $item->get('http://ark.im/', INSTALL_DIR.'vendor-src');
+        $item->get('http://edm.ark.im/', INSTALL_DIR.'vendor-src');
+        $item->run();
     }
 }
