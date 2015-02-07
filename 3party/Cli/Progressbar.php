@@ -98,7 +98,6 @@ class Progressbar
 
     public function end()
     {
-
         \Hoa\Console\Cursor::moveTo($this->_info['progress']['start']);
         echo str_repeat($this->getOption('fill_finished'), $this->getOption('width'));
 

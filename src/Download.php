@@ -3,7 +3,7 @@ namespace Launchee;
 
 class Download
 {
-    private $_useCache = true;
+    private $_useCache = false;
 
     public function useCache($bool)
     {
@@ -27,15 +27,10 @@ class Download
             $progress->setLabel($url_info['basename']);
 
             $file = new \Camael24\Cli\Downloader($url);
-            $file->watchProgress($progress);
+            $file->setWatcher($progress);
             $file->saveAs($destination.'/'.$url_info['basename']);
-        }
-        else {
-
+        } else {
             echo str_repeat(' ', $progress->getOption('span')).$url_info['basename'].' has in cache, use it'."\n";
-
         }
-
-
     }
 }
