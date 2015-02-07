@@ -23,6 +23,6 @@ class Main extends Generic
 
         $git = new \Launchee\Github();
         $git->get('hoaproject/Console', '2.14.12.10');
-        $git->get('atoum/atoum', '1.2.8');
+        $git->get('atoum/atoum', '1.2.2');
     }
 }

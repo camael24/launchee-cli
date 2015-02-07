@@ -41,8 +41,7 @@ class Git extends Command
     protected function _clone($source, $dir)
     {
         if(is_dir($this->_directory.'/'.$dir) === false)
-            var_dump($source, $dir, $this->_directory);
-           //return $this->_run('git', ['clone', $source, $dir], $this->_directory);
+           return $this->_run('git', ['clone', $source, $dir], $this->_directory);
 
         return null;
     }
@@ -50,13 +49,13 @@ class Git extends Command
     protected function _checkout($dir, $tag)
     {
         if(is_dir($this->_directory . $dir.'/.git') === true){
-            $this->_run('git', ['--git-dir='.$this->_directory . $dir.'/.git', 'stash']);
+            //$this->_run('git', ['--git-dir='.$this->_directory . $dir.'/.git', 'stash'], $dir);
 
-            $checkout = $this->_run('git', ['--git-dir='.$this->_directory . $dir.'/.git', 'checkout', $tag]);
+            // $checkout = $this->_run('git', ['--git-dir='.$this->_directory . $dir.'/.git', 'checkout', $tag], $dir);
 
             if($checkout !== 0){
                 $this->_output .= 'Complementary information tag list : '."\n";
-                $this->_run('git', ['--git-dir='.$this->_directory . $dir.'/.git', 'tag', '-l']);
+                //$this->_run('git', ['--git-dir='.$this->_directory . $dir.'/.git', 'tag', '-l'], $dir);
             }
 
             return $checkout;
@@ -95,8 +94,8 @@ class Git extends Command
             if($this->_clone($source, $cwd) !== 0)
                 throw new Exception("Clone of %s in %s \n Error: \n %s", 0, [$source, $cwd, $this->_output]);
                 
-            //if($this->_checkout($cwd, $tag) !== 0)
-            //    throw new Exception("Checkout tag %s in %s \n Error: \n %s", 0, [$tag, $cwd, $this->_output]);
+            // if($this->_checkout($cwd, $tag) !== 0)
+            //     throw new Exception("Checkout tag %s in %s \n Error: \n %s", 0, [$tag, $cwd, $this->_output]);
         }
     }
 }

@@ -34,7 +34,7 @@ class Command
                 throw new Exception("%s are not find in PATH and in %s", 0, [$process, INSTALL_DIR.'bin/']);
         }
 
-        echo $path.' '.implode(' ', $argument)."\n";
+          echo $path.' '.implode(' ', $argument).' '.$cwd."\n";
 
         $processus = new \Hoa\Console\Processus($path, $argument, null, $cwd);
 
