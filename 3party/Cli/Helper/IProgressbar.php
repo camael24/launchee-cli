@@ -8,4 +8,8 @@ interface IProgressbar
     public function stop();
 
     public function seek($percent);
+
+    public function infinite();
+
+    public function step($step);
 }

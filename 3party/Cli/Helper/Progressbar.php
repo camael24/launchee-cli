@@ -8,6 +8,7 @@ class Progressbar implements IProgressbar
     private $_isAnimable = false;
     private $_isAnimableForce = null;
     private $_label   = '';
+    private $_step    = null;
     private $_options = [
         'bracket_'      => '[',
         '_bracket'      => ']',
@@ -79,6 +80,11 @@ class Progressbar implements IProgressbar
             }
         }
 
+        if($percent === null){
+
+            $animation = false;
+        }
+
         if ($animation === true) {
             $this->_animated($percent);
         } else {
@@ -86,9 +92,27 @@ class Progressbar implements IProgressbar
         }
     }
 
+    public function infinite() {
+        $this->seek(null);
+    }
+
     protected function goToBeginLine()
     {
         echo "\x0D";
+    }
+
+    protected function goToEndLine() {
+
+        $width = \Hoa\Console\Window::getSize()['x'];
+        $x     = \Hoa\Console\Cursor::getPosition()['x'];
+        $span  = $width - $x;
+
+        if($span > 0)
+            echo str_repeat(' ',$span);
+
+
+
+        
     }
 
     protected function finish()
@@ -104,6 +128,15 @@ class Progressbar implements IProgressbar
         $baseline   .= '100 %';
 
         echo $baseline;
+        $this->goToEndLine();
+    }
+
+    protected function _fill($width)
+    {
+        $string = str_repeat('#-+=|\/', 20);
+        $string = str_shuffle($string);
+
+        return substr($string, 0, $width);
     }
 
     protected function _static($percent)
@@ -124,17 +157,33 @@ class Progressbar implements IProgressbar
         $baseline    = str_repeat(' ', $span);
         $baseline   .= $this->_name.' ';
         $baseline   .= $this->getOption('bracket_');
-        $baseline   .= str_repeat($this->getOption('fill'), $current);
-        $baseline   .= '>';
 
-        if ($rest > 0) {
-            $baseline   .= str_repeat($this->getOption('fill'), $rest);
+        if($percent !== null) {
+
+            $baseline   .= str_repeat($this->getOption('fill'), $current);
+            $baseline   .= '>';
+
+            if ($rest > 0) {
+                $baseline   .= str_repeat($this->getOption('fill'), $rest);
+            }
+
+        }
+        else {
+            $baseline .= $this->_fill($this->getOption('width'));
         }
 
         $baseline   .= $this->getOption('_bracket').'   ';
-        $baseline   .= $p;
+        
+        if($percent !== null){
+            $baseline   .= $p;
+        }
+        else {
+
+            $baseline   .= 'infinte '.$this->_step;
+        }
 
         echo $baseline;
+        $this->goToEndLine();
     }
 
     protected function _animated($percent)
@@ -166,6 +215,11 @@ class Progressbar implements IProgressbar
         echo $percent;
     }
 
+    public function step($step)
+    {
+        $this->_step = $step;
+    }
+
     public function start()
     {
         $span                             = $this->getOption('span');
@@ -177,7 +231,7 @@ class Progressbar implements IProgressbar
         $this->_info['progress']['end']   = strlen($baseline);
         $baseline                        .= $this->getOption('_bracket').'   ';
         $this->_info['label']['start']    = strlen($baseline)+1;
-        $baseline                        .= '100';
+        $baseline                        .= '   ';
         $this->_info['label']['end']      = strlen($baseline);
         $baseline                        .= ' %';
 
