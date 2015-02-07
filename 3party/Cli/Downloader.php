@@ -1,7 +1,6 @@
 <?php
 namespace Camael24\Cli;
 
-use Hoa\Core;
 use Hoa\File;
 
 class Downloader
@@ -17,7 +16,6 @@ class Downloader
     public function setWatcher(Helper\IProgressbar $progress)
     {
         $this->_progress = $progress;
-
     }
 
     public function getWatcher()
@@ -37,8 +35,9 @@ class Downloader
 
         // $dest->writeAll($this->_source->readAll());
 
-        for($i = 0; $i <= 100; $i++)
+        for ($i = 0; $i <= 100; $i++) {
             $this->_progress->seek($i);
+        }
 
         if ($this->_progress !== null) {
             $this->_progress->stop();

@@ -8,7 +8,6 @@ $path =  __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY
         define('ROOT_DIR', realpath(__DIR__.DIRECTORY_SEPARATOR.'..').DIRECTORY_SEPARATOR);
     }
 
-
     if (defined('TPL_DIR') === false) {
         define('TPL_DIR', realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'tpl').DIRECTORY_SEPARATOR);
     }

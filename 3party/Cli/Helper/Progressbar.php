@@ -5,7 +5,8 @@ class Progressbar implements IProgressbar
 {
     private $_stream  = null;
     private $_info    = array();
-    private $_isAnimable = true;
+    private $_isAnimable = false;
+    private $_isAnimableForce = null;
     private $_label   = '';
     private $_options = [
         'bracket_'      => '[',
@@ -19,12 +20,19 @@ class Progressbar implements IProgressbar
         'span'          => 5,
     ];
 
-    public function __construct($options = array())
+    public function __construct($options = array(), $animation = null)
     {
         $this->setOptions($options);
+        $this->setAnimable($animation);
 
-        if(OS_WIN === true)
+        if (OS_WIN === true) {
             $this->_isAnimable = false;
+        }
+    }
+
+    public function setAnimable($bool)
+    {
+        $this->_isAnimableForce = $bool;
     }
 
     public function setStream($stream)
@@ -57,19 +65,36 @@ class Progressbar implements IProgressbar
 
     public function seek($percent)
     {
-        if($this->_isAnimable === true)
+        $animation = false;
+
+        if ($this->_isAnimableForce === null) {
+            if ($this->_isAnimable === true) {
+                $animation = true;
+            } else {
+                $animation = false;
+            }
+        } else {
+            if (is_bool($this->_isAnimableForce)) {
+                $animation = $this->_isAnimableForce;
+            }
+        }
+
+        if ($animation === true) {
             $this->_animated($percent);
-        else
+        } else {
             $this->_static($percent);
+        }
     }
 
-    protected function goToBeginLine(){
+    protected function goToBeginLine()
+    {
         echo "\x0D";
     }
 
-    protected function finish() {
+    protected function finish()
+    {
         $this->goToBeginLine();
-        
+
         $span        = $this->getOption('span');
         $baseline    = str_repeat(' ', $span);
         $baseline   .= $this->_name.' ';
@@ -81,8 +106,8 @@ class Progressbar implements IProgressbar
         echo $baseline;
     }
 
-    protected function _static($percent) {
-        
+    protected function _static($percent)
+    {
         $this->goToBeginLine();
         $p = '';
         if ($percent < 10) {
@@ -101,18 +126,19 @@ class Progressbar implements IProgressbar
         $baseline   .= $this->getOption('bracket_');
         $baseline   .= str_repeat($this->getOption('fill'), $current);
         $baseline   .= '>';
-        
-        if($rest > 0)
+
+        if ($rest > 0) {
             $baseline   .= str_repeat($this->getOption('fill'), $rest);
+        }
 
         $baseline   .= $this->getOption('_bracket').'   ';
         $baseline   .= $p;
 
         echo $baseline;
-
     }
 
-    protected function _animated($percent) {
+    protected function _animated($percent)
+    {
         $current = round(($percent * $this->getOption('width')) / 100);
         $current = $this->_info['progress']['start'] + $current;
 
@@ -120,9 +146,13 @@ class Progressbar implements IProgressbar
             $current = $this->_info['progress']['end'];
         }
 
-        \Hoa\Console\Cursor::moveTo($current);
-
-        echo $this->getOption('cursor');
+        if ($current > $this->_info['progress']['start']) {
+            \Hoa\Console\Cursor::moveTo($current - 1);
+            echo $this->getOption('fill').$this->getOption('cursor');
+        } else {
+            \Hoa\Console\Cursor::moveTo($current);
+            echo $this->getOption('cursor');
+        }
 
         \Hoa\Console\Cursor::moveTo($this->_info['label']['start']);
 
@@ -153,22 +183,19 @@ class Progressbar implements IProgressbar
 
         echo $baseline;
 
-        if($this->_isAnimable === true)
+        if ($this->_isAnimable === true) {
             \Hoa\Console\Cursor::save();
+        }
     }
 
     public function stop()
     {
-
-
-        if($this->_isAnimable === true)
-        {
+        if ($this->_isAnimable === true) {
             \Hoa\Console\Cursor::moveTo($this->_info['progress']['start']);
             echo str_repeat($this->getOption('fill_finished'), $this->getOption('width'));
 
             \Hoa\Console\Cursor::restore();
-        }
-        else {
+        } else {
             $this->finish();
         }
         echo "\n";
