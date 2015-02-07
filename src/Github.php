@@ -47,13 +47,14 @@ class Github
 
         $file = 'https://github.com/'.$repository.'/archive/'.$tag.'.zip';
         $name = strtolower(substr($repository, strpos($repository, '/') + 1, strlen($repository)));
+        $fname =  strtolower(str_replace('/', '-', $repository)).'-'.$tag.'.zip';
 
         $download = new \Launchee\Download();
-        $download->get($file, INSTALL_DIR.'vendor-src', $repository);
+        $download->get($file, INSTALL_DIR.'vendor-src', $repository, $fname);
         $download->run();
 
         $extract = new \Launchee\Extract(INSTALL_DIR);
-        $extract->unzip(INSTALL_DIR.'vendor-src/'.$tag.'.zip', '', $repository);
+        $extract->unzip(INSTALL_DIR.'vendor-src/'.$fname, '', $repository);
         $extract->run();
 
         if (is_dir(INSTALL_DIR.$name)) {
