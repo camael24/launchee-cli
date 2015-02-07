@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+$path =  __DIR__ 	. DIRECTORY_SEPARATOR .
+		 '..'		. DIRECTORY_SEPARATOR . 
+		 'src'		. DIRECTORY_SEPARATOR . 
+		 'Launchee.php';
+
+
+require_once $path;
