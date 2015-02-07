@@ -93,9 +93,6 @@ class Git extends Command
             
             if($this->_clone($source, $cwd) !== 0)
                 throw new Exception("Clone of %s in %s \n Error: \n %s", 0, [$source, $cwd, $this->_output]);
-                
-            // if($this->_checkout($cwd, $tag) !== 0)
-            //     throw new Exception("Checkout tag %s in %s \n Error: \n %s", 0, [$tag, $cwd, $this->_output]);
         }
     }
 }

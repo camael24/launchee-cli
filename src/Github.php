@@ -3,7 +3,7 @@ namespace Launchee;
 
 class Github
 {
-    public function tag($name, $tag)
+    public function master($name)
     {
         $git = \Hoa\Console\Processus::locate('git');
 
@@ -73,6 +73,9 @@ class Github
 
     public function get($name, $tag)
     {
-        $this->tag($name, $tag);
+        if($tag === 'master')
+            $this->master($name);
+        else
+            $this->release($name, $tag);
     }
 }
