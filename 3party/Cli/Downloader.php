@@ -31,7 +31,6 @@ class Downloader
         $length = null;
 
         if ($progress !== null) {
-
             $progress->start();
 
             $this->_source->on('size', function (\Hoa\Core\Event\Bucket $bucket) use (&$length) {
@@ -48,13 +47,12 @@ class Downloader
                         $percent = round((intval($data['transferred']) * 100) / $length);
                         $progress->seek($percent);
                     } else {
-
-                        $bytes = function ($size, $precision = 2) { 
+                        $bytes = function ($size, $precision = 2) {
 
                             $base = log($size, 1024);
-                            $suffixes = array('', 'k', 'M', 'G', 'T');   
+                            $suffixes = array('', 'k', 'M', 'G', 'T');
 
-                            return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+                            return round(pow(1024, $base - floor($base)), $precision).$suffixes[floor($base)];
                         };
 
                         $progress->step($bytes($data['transferred']));
@@ -65,7 +63,7 @@ class Downloader
             });
         }
         $this->_source->open();
-        
+
         $dest->writeAll($this->_source->readAll());
 
         if ($progress !== null) {

@@ -80,8 +80,7 @@ class Progressbar implements IProgressbar
             }
         }
 
-        if($percent === null){
-
+        if ($percent === null) {
             $animation = false;
         }
 
@@ -92,7 +91,8 @@ class Progressbar implements IProgressbar
         }
     }
 
-    public function infinite() {
+    public function infinite()
+    {
         $this->seek(null);
     }
 
@@ -101,18 +101,15 @@ class Progressbar implements IProgressbar
         echo "\x0D";
     }
 
-    protected function goToEndLine() {
-
+    protected function goToEndLine()
+    {
         $width = \Hoa\Console\Window::getSize()['x'];
         $x     = \Hoa\Console\Cursor::getPosition()['x'];
         $span  = $width - $x;
 
-        if($span > 0)
-            echo str_repeat(' ',$span);
-
-
-
-        
+        if ($span > 0) {
+            echo str_repeat(' ', $span);
+        }
     }
 
     protected function finish()
@@ -158,28 +155,23 @@ class Progressbar implements IProgressbar
         $baseline   .= $this->_name.' ';
         $baseline   .= $this->getOption('bracket_');
 
-        if($percent !== null) {
-
+        if ($percent !== null) {
             $baseline   .= str_repeat($this->getOption('fill'), $current);
             $baseline   .= '>';
 
             if ($rest > 0) {
                 $baseline   .= str_repeat($this->getOption('fill'), $rest);
             }
-
-        }
-        else {
+        } else {
             $baseline .= $this->_fill($this->getOption('width'));
         }
 
         $baseline   .= $this->getOption('_bracket').'   ';
-        
-        if($percent !== null){
-            $baseline   .= $p;
-        }
-        else {
 
-            $baseline   .= 'infinte '.$this->_step;
+        if ($percent !== null) {
+            $baseline   .= $p;
+        } else {
+            $baseline   .= $this->_step;
         }
 
         echo $baseline;
