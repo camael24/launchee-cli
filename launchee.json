@@ -25,7 +25,8 @@
 
 	},
 	"xulrunner" : {
-		"version" : "25.*",
+		"source-unix" : "http://ftp.mozilla.org/pub/mozilla.org/xulrunner/releases/latest/runtimes/xulrunner-35.0.1.en-US.linux-i686.tar.bz2",
+		"source-win" : "http://ftp.mozilla.org/pub/mozilla.org/xulrunner/releases/latest/runtimes/xulrunner-35.0.1.en-US.win32.zip",
 		"url" : "http://127.0.0.1:80",
 		"base" : "Main.xul"
 	}

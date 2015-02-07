@@ -33,27 +33,28 @@ class Git extends Command
         $this->_progress->infinite();
     }
 
-    public function repo($source, $directory = '', $tag ='')
+    public function repo($source, $directory = '', $tag = '')
     {
         $this->_item[] = [$source, $directory, $tag];
     }
 
     protected function _clone($source, $dir)
     {
-        if(is_dir($this->_directory.'/'.$dir) === false)
-           return $this->_run('git', ['clone', $source, $dir], $this->_directory);
+        if (is_dir($this->_directory.'/'.$dir) === false) {
+            return $this->_run('git', ['clone', $source, $dir], $this->_directory);
+        }
 
-        return null;
+        return;
     }
 
     protected function _checkout($dir, $tag)
     {
-        if(is_dir($this->_directory . $dir.'/.git') === true){
+        if (is_dir($this->_directory.$dir.'/.git') === true) {
             //$this->_run('git', ['--git-dir='.$this->_directory . $dir.'/.git', 'stash'], $dir);
 
             // $checkout = $this->_run('git', ['--git-dir='.$this->_directory . $dir.'/.git', 'checkout', $tag], $dir);
 
-            if($checkout !== 0){
+            if ($checkout !== 0) {
                 $this->_output .= 'Complementary information tag list : '."\n";
                 //$this->_run('git', ['--git-dir='.$this->_directory . $dir.'/.git', 'tag', '-l'], $dir);
             }
@@ -88,11 +89,11 @@ class Git extends Command
                 $length = 0;
             }
 
-
             $this->_progress->setLabel($file.str_repeat(' ', $length));
-            
-            if($this->_clone($source, $cwd) !== 0)
+
+            if ($this->_clone($source, $cwd) !== 0) {
                 throw new Exception("Clone of %s in %s \n Error: \n %s", 0, [$source, $cwd, $this->_output]);
+            }
         }
     }
 }

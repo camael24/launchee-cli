@@ -48,6 +48,7 @@ use Hoa\Core\Exception\Exception;
             }
 
             $main = (new \Launchee\Installer\Main($options->all()))->install();
+            $xul  = (new \Launchee\Installer\Xulrunner($options->get('xulrunner')))->install();
 
             foreach ($options->get('http') as $http_server => $opt) {
                 switch ($http_server) {

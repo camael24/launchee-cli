@@ -42,18 +42,16 @@ class Download
             $url_info = pathinfo($url);
             $progress = new \Camael24\Cli\Helper\Progressbar([], false);
 
-            if($value[2] !== '')
-            {
+            if ($value[2] !== '') {
                 $file   = $value[2];
                 $length =  $maxLabel - strlen($file);
-            }
-            else {
+            } else {
                 $file = $url_info['basename'];
                 $length =  $maxLabel - strlen($file);
             }
 
             $filename = ($as === '') ? $url_info['basename'] : $as;
-            $destination = $destination . '/' . $filename;
+            $destination = $destination.'/'.$filename;
 
             if (file_exists($destination) === false or $this->_useCache === false) {
                 if (file_exists($destination) === true) {

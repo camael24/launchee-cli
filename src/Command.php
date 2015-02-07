@@ -27,14 +27,14 @@ class Command
         $path = \Hoa\Console\Processus::locate($process);
 
         if ($path === null) {
-
-            if(is_file(realpath(INSTALL_DIR.'bin/'.$process)))
+            if (is_file(realpath(INSTALL_DIR.'bin/'.$process))) {
                 $path = realpath(INSTALL_DIR.'bin/'.$process);
-            else 
+            } else {
                 throw new Exception("%s are not find in PATH and in %s", 0, [$process, INSTALL_DIR.'bin/']);
+            }
         }
 
-          echo $path.' '.implode(' ', $argument).' '.$cwd."\n";
+        echo $path.' '.implode(' ', $argument).' '.$cwd."\n";
 
         $processus = new \Hoa\Console\Processus($path, $argument, null, $cwd);
 

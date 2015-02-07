@@ -13,8 +13,8 @@ class Github
 
         $lib = strtolower(substr($name, strpos($name, '/') + 1, strlen($name)));
 
-        if(is_dir(INSTALL_DIR.'/'.$lib)) {
-            $this->rrmdir(INSTALL_DIR . '/' . $lib);
+        if (is_dir(INSTALL_DIR.'/'.$lib)) {
+            $this->rrmdir(INSTALL_DIR.'/'.$lib);
         }
 
         if (is_dir(INSTALL_DIR.'/'.$lib) === false) {
@@ -22,7 +22,6 @@ class Github
             $cmd->repo('https://github.com/'.$name, $lib, $tag);
             $cmd->run();
         }
-
     }
     public function rrmdir($dir)
     {
@@ -73,9 +72,10 @@ class Github
 
     public function get($name, $tag)
     {
-        if($tag === 'master')
+        if ($tag === 'master') {
             $this->master($name);
-        else
+        } else {
             $this->release($name, $tag);
+        }
     }
 }

@@ -6,6 +6,7 @@ class Extract extends Command
     private $_item = [];
     private $_directory = '';
     private $_progress = '';
+    private $_args = [];
 
     public function __construct($directory)
     {
@@ -33,7 +34,14 @@ class Extract extends Command
 
     public function unzip($source, $directory, $label = '')
     {
+        $this->_args[] = '-o';
         $this->_file('unzip', $source, $directory, $label);
+    }
+
+    public function bz2($source, $directory, $label = '')
+    {
+        $this->_args[] = 'jxf';
+        $this->_file('tar', $source, $directory, $label);
     }
 
     protected function _file($exe, $source, $directory, $label = '')
@@ -86,7 +94,7 @@ class Extract extends Command
                 }
 
                 if (($cwd = realpath($cwd)) !== false) {
-                    $this->_run($type, ['-o', $source], $cwd);
+                    $this->_run($type, array_merge($this->_args, [$source]), $cwd);
                 }
             }
         }

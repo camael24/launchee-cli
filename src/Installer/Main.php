@@ -21,8 +21,8 @@ class Main extends Generic
 //        $file->unzip(INSTALL_DIR.'vendor-src/php-5.6.5-nts-Win32-VC11-x86 (copie).zip', 'php');
 //        $file->run();
 
-        $git = new \Launchee\Github();
-        $git->get('hoaproject/Console', '2.14.12.10');
-        $git->get('atoum/atoum', 'master');
+//        $git = new \Launchee\Github();
+//        $git->get('hoaproject/Console', '2.14.12.10');
+//        $git->get('atoum/atoum', 'master');
     }
 }

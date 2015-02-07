@@ -170,9 +170,9 @@ class Progressbar implements IProgressbar
 
         if ($percent !== null) {
             $baseline   .= $p;
-        } else {
-            $baseline   .= $this->_step;
         }
+
+        $baseline   .= $this->_step;
 
         echo $baseline;
         $this->goToEndLine();
