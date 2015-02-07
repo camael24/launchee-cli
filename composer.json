@@ -1,0 +1,26 @@
+{
+    "name": "camael24/launchee",
+    "description": "Generate an browserless application",
+    "require": {
+        "hoa/console": "~2.15",
+        "hoa/router": "2.15.01.23",
+        "hoa/dispatcher": "0.15.01.23",
+        "hoa/file": "0.14.12.10",
+        "hoa/http": "0.15.*"
+    },
+    "require-dev": {
+        "atoum/atoum": "~1.2"
+    },
+    "authors": [
+        {
+            "name": "Cam Ael",
+            "email": "thehawk@hoa-project.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Launchee\\": "src/",
+            "Camael24\\": "3party/"
+        }
+    }
+}

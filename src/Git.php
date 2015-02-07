@@ -27,7 +27,6 @@ class Git extends Command
     public function output($bucket)
     {
         $data = $bucket->getData();
-        
         $this->_output .= $data['line']."\n";
 
         $this->_progress->step($data['line']);
@@ -89,6 +88,7 @@ class Git extends Command
             if ($length < 0) {
                 $length = 0;
             }
+
 
             $this->_progress->setLabel($file.str_repeat(' ', $length));
             
