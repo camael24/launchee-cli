@@ -1,10 +1,11 @@
 <?php
-namespace Camael24\Cli;
+namespace Camael24\Cli\Helper;
 
-class Progressbar
+class Progressbar implements IProgressbar
 {
     private $_stream  = null;
     private $_info    = array();
+    private $_isAnimable = true;
     private $_label   = '';
     private $_options = [
         'bracket_'      => '[',
@@ -14,13 +15,16 @@ class Progressbar
         'cursor'        => '>',
         'cursor_color'  => 'fg(yellow) bg(black)',
         'fill_color'    => 'fg(white) bg(blacl)',
-        'width'         => 4,
+        'width'         => 10,
         'span'          => 5,
     ];
 
     public function __construct($options = array())
     {
         $this->setOptions($options);
+
+        if(OS_WIN === true)
+            $this->_isAnimable = false;
     }
 
     public function setStream($stream)
@@ -53,6 +57,62 @@ class Progressbar
 
     public function seek($percent)
     {
+        if($this->_isAnimable === true)
+            $this->_animated($percent);
+        else
+            $this->_static($percent);
+    }
+
+    protected function goToBeginLine(){
+        echo "\x0D";
+    }
+
+    protected function finish() {
+        $this->goToBeginLine();
+        
+        $span        = $this->getOption('span');
+        $baseline    = str_repeat(' ', $span);
+        $baseline   .= $this->_name.' ';
+        $baseline   .= $this->getOption('bracket_');
+        $baseline   .= str_repeat($this->getOption('fill_finished'), $this->getOption('width'));
+        $baseline   .= $this->getOption('_bracket').'   ';
+        $baseline   .= '100 %';
+
+        echo $baseline;
+    }
+
+    protected function _static($percent) {
+        
+        $this->goToBeginLine();
+        $p = '';
+        if ($percent < 10) {
+            $p .= '0';
+        }
+        if ($percent < 100) {
+            $p .= '0';
+        }
+
+        $current     = round(($percent * $this->getOption('width')) / 100);
+        $rest        = $this->getOption('width') - $current - 1;
+        $p          .= $percent;
+        $span        = $this->getOption('span');
+        $baseline    = str_repeat(' ', $span);
+        $baseline   .= $this->_name.' ';
+        $baseline   .= $this->getOption('bracket_');
+        $baseline   .= str_repeat($this->getOption('fill'), $current);
+        $baseline   .= '>';
+        
+        if($rest > 0)
+            $baseline   .= str_repeat($this->getOption('fill'), $rest);
+
+        $baseline   .= $this->getOption('_bracket').'   ';
+        $baseline   .= $p;
+
+        echo $baseline;
+
+    }
+
+    protected function _animated($percent) {
         $current = round(($percent * $this->getOption('width')) / 100);
         $current = $this->_info['progress']['start'] + $current;
 
@@ -93,15 +153,24 @@ class Progressbar
 
         echo $baseline;
 
-        \Hoa\Console\Cursor::save();
+        if($this->_isAnimable === true)
+            \Hoa\Console\Cursor::save();
     }
 
-    public function end()
+    public function stop()
     {
-        \Hoa\Console\Cursor::moveTo($this->_info['progress']['start']);
-        echo str_repeat($this->getOption('fill_finished'), $this->getOption('width'));
 
-        \Hoa\Console\Cursor::restore();
+
+        if($this->_isAnimable === true)
+        {
+            \Hoa\Console\Cursor::moveTo($this->_info['progress']['start']);
+            echo str_repeat($this->getOption('fill_finished'), $this->getOption('width'));
+
+            \Hoa\Console\Cursor::restore();
+        }
+        else {
+            $this->finish();
+        }
         echo "\n";
     }
 }
