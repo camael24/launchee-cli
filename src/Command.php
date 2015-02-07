@@ -13,9 +13,16 @@ class Command
 
     public function output($bucket)
     {
+        $data = $bucket->getData();
+        echo $data['line']."\n";
     }
 
     public function run($process, $argument, $cwd = null)
+    {
+        return $this->_run($process, $argument, $cwd);
+    }
+
+    protected function _run($process, $argument, $cwd = null)
     {
         $processus = new \Hoa\Console\Processus($process, $argument, null, $cwd);
 

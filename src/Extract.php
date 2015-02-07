@@ -31,44 +31,63 @@ class Extract extends Command
         $this->_progress->infinite();
     }
 
-    public function file($source, $directory)
+    public function unzip($source, $directory, $label = '')
     {
-        $this->_item[] = [$source, $this->_directory.'/'.$directory];
+        $this->_file('unzip', $source, $directory, $label);
     }
 
-    public function unzip()
+    protected function _file($exe, $source, $directory, $label = '')
+    {
+        $this->_item[$exe][] = [$source, $this->_directory.'/'.$directory, $label];
+    }
+
+    public function run()
     {
         $maxLabel = 0;
 
-        foreach ($this->_item as $value) {
-            $source     = $value[0];
-            $length     = strlen(basename($source));
+        foreach ($this->_item as $a) {
+            foreach ($a as $value) {
+                $source = '';
+                if ($value[2] !== '') {
+                    $source = $value[2];
+                } else {
+                    $source     = $value[0];
+                }
 
-            if ($length > $maxLabel) {
-                $maxLabel = $length;
+                $length     = strlen(basename($source));
+
+                if ($length > $maxLabel) {
+                    $maxLabel = $length;
+                }
             }
         }
 
-        foreach ($this->_item as $value) {
-            $source = $value[0];
-            $cwd    = $value[1];
+        foreach ($this->_item as $type => $a) {
+            foreach ($a as $value) {
+                $source = $value[0];
+                $cwd    = $value[1];
 
-            $file = basename($source);
+                if ($value[2] !== '') {
+                    $file = $value[2];
+                    $length =  $maxLabel - strlen($file);
+                } else {
+                    $file = basename($source);
+                    $length =  $maxLabel - strlen($file);
+                }
 
-            $length =  $maxLabel - strlen($file);
+                if ($length < 0) {
+                    $length = 0;
+                }
 
-            if ($length < 0) {
-                $length = 0;
-            }
+                $this->_progress->setLabel($file.str_repeat(' ', $length));
 
-            $this->_progress->setLabel($file.str_repeat(' ', $length));
+                if (is_dir($cwd) === false) {
+                    mkdir($cwd, 0777, true);
+                }
 
-            if (is_dir($cwd) === false) {
-                mkdir($cwd, 0777, true);
-            }
-
-            if (($cwd = realpath($cwd)) !== false) {
-                $this->run('unzip', ['-o', $source], $cwd);
+                if (($cwd = realpath($cwd)) !== false) {
+                    $this->_run($type, ['-o', $source], $cwd);
+                }
             }
         }
     }

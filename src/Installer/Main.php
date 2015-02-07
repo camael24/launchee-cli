@@ -16,10 +16,13 @@ class Main extends Generic
 //        $item->get('http://edm.ark.im/', INSTALL_DIR.'vendor-src');
 //        $item->run();
 
-        $file = new \Launchee\Extract(INSTALL_DIR);
+//        $file = new \Launchee\Extract(INSTALL_DIR);
+//        $file->unzip(INSTALL_DIR.'vendor-src/php-5.6.5-nts-Win32-VC11-x86.zip', 'php');
+//        $file->unzip(INSTALL_DIR.'vendor-src/php-5.6.5-nts-Win32-VC11-x86 (copie).zip', 'php');
+//        $file->run();
 
-        $file->file(INSTALL_DIR.'vendor-src/php-5.6.5-nts-Win32-VC11-x86.zip', 'php');
-        $file->file(INSTALL_DIR.'vendor-src/php-5.6.5-nts-Win32-VC11-x86 (copie).zip', 'php');
-        $file->unzip();
+        $git = new \Launchee\Github();
+        $git->get('hoaproject/Console', '2.14.12.10');
+        $git->get('atoum/atoum', '1.2.2');
     }
 }
