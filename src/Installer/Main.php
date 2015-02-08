@@ -8,6 +8,21 @@ class Main extends Generic
         $vendor = $this->get('vendor');
         $name   = $this->get('name');
 
+        /**
+        * Sequelette d'application
+        */
+
+        // Application.ini
+        // chrome.manifest
+        // chrome/content/mybrowser.js
+        // chrome/content/mybrowser.xul
+        // chrome/locale/en-US/mybrowser.dtd
+        // components/startup-service-unix.js
+        // components/startup-service-windows.js
+        // default/preferences/pref.js
+        // resource/scripts/(win|unix)/..
+        // resource/conf/(nginx)/..
+
         // new \Launchee\File('Application.ini', 'application.tpl.php', ['vendor' => $vendor, 'name' => $name]);
 
 //        $item = new \Launchee\Download();
