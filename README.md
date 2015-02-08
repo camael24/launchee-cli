@@ -10,10 +10,10 @@ Todo
 
 Executable
 ---
-- [ ] Http (Nginx|PHP Built-in)
-- [ ] Fpm exclusivement pour PHP
-- [ ] Base de données ?
-- [ ] xulrunner
+- Http (Nginx|PHP Built-in)
+- Fpm exclusivement pour PHP
+- Base de données ?
+- xulrunner
 
 
 Questions
