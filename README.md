@@ -18,8 +18,6 @@ Executable
 
 Questions
 ---
-Génération de l'application pour toutes les plateformes Windows/Osx/Unix (32 et 64), ou génération en fonction de la machine hote 
-
-Gestion de la configuration ? (Nginx, Mysql ...)
-
-Packager ses propres applications ?
+- Génération de l'application pour toutes les plateformes Windows/Osx/Unix (32 et 64), ou génération en fonction de la machine hote 
+- Gestion de la configuration ? (Nginx, Mysql ...)
+- Packager ses propres applications ?
